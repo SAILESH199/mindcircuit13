@@ -1,0 +1,11 @@
+FROM amazonlinux AS build
+RUN yum update && yum install -y go
+ENV GO111MODULE=off
+WORKDIR /opt
+COPY . /opt
+RUN go build calculator.go
+
+FROM scratch
+COPY --from=build /opt/calculator /opt/calculator
+ENTRYPOINT ["/opt/calculator"]
+[root@docker calculatorapp]#
